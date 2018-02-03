@@ -1,0 +1,110 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html>\
+<head>\
+	<title>PHP FORM</title>\
+</head>\
+<body>\
+<body style='background-color:#a3c1ad'>\
+<?php\
+	readfile('navigation.tmpl.html');\
+	echo "<p>-----------User Entry Form-----------</p>";\
+	echo "<p>*Be sure to fill in all fields correctly*</p>";\
+	echo "<p>****Do not refresh this page...*****</p>";\
+	echo "<img src='https://tse2.mm.bing.net/th?id=OIP.Wx-McBO2JBVt9TSofMNRQAHaHa&w=211&h=203&c=7&o=5&dpr=2&pid=1.7, https://www.bing.com/' alt='photo' />";\
+?>\
+\
+<?php\
+$name = '';\
+$password = '';\
+$gender = '';\
+$color = '';\
+\
+	if (isset($_POST["submit"]))\
+		\{$ok = true;\
+		if (!isset($_POST['name']) || $_POST['name'] === '')\
+			\{$ok =false;\
+				echo "<p>PLEASE COMPLETE FORM FOR SUBMISSION!!!</p>";\}\
+			else \{$name = $_POST['name'];\}\
+		if (!isset($_POST['password']) || $_POST['password'] === '')\
+			\{$ok =false;\
+				echo "<p>PLEASE COMPLETE FORM FOR SUBMISSION!!!</p>";\}\
+			else \{$password = $_POST['password'];\}\
+		if (!isset($_POST['gender']) || $_POST['gender'] === '')\
+			\{$ok =false;\
+				echo "<p>PLEASE COMPLETE FORM FOR SUBMISSION!!!</p>";\}\
+			else \{$gender = $_POST['gender'];\}\
+		if (!isset($_POST['color']) || $_POST['color'] === '')\
+			\{$ok =false;\
+				echo "<p>PLEASE COMPLETE FORM FOR SUBMISSION!!!</p>";\}\
+			else \{$color = $_POST['color'];\}\
+		if ($ok)\
+		\{\
+			$hash = password_hash($password, PASSWORD_DEFAULT);\
+			//database code goes here\
+			$db = mysqli_connect('localhost', 'root', '', 'phpUdemy');\
+			$sql = sprintf("INSERT INTO users (name, password, gender, color)\
+				VALUES ('%s', '%s', '%s', '%s')", \
+				mysqli_real_escape_string($db, $name),\
+				mysqli_real_escape_string($db, $hash),\
+				mysqli_real_escape_string($db, $gender),\
+				mysqli_real_escape_string($db, $color));\
+			mysqli_query($db, $sql);\
+			mysqli_close($db);\
+			echo '<p>User added.<br>\
+					Redirecting back to form...</p>';\
+			printf('User name: %s\
+			<br>Gender: %s \
+			<br>Color: %s',\
+			htmlspecialchars($name), \
+			htmlspecialchars($gender), \
+			htmlspecialchars($color));\
+		\}\
+	\}\
+?>\
+<form method="post" actions="">\
+	User Name: <input type="text" name="name" value="<?php\
+		echo htmlspecialchars($name)\
+	?>"><br>\
+	Password: <input type="password" name="password"><br>\
+	Gender:\
+		<input type="radio" name="gender" value="f"<?php\
+			if ($gender === 'f')\
+				\{echo 'checked';\}\
+		?>>female\
+		<input type="radio" name="gender" value="m"<?php\
+			if ($gender === 'm')\
+				\{echo 'checked';\}\
+		?>>male<br>\
+	Favorite Color:\
+		<select name="color">\
+			<option value="">Please Select</option>\
+			<option value="#f00"<?php\
+				if ($color === '#f00')\
+					\{echo 'selected';\}\
+			?>>red</option>\
+			<option value="#0f0"<?php\
+				if ($color === '#0f0')\
+					\{echo 'selected';\}\
+			?>>green</option>\
+			<option value="#00f"<?php\
+				if ($color === '#00f')\
+					\{echo 'selected';\}\
+			?>>blue</option>\
+		</select><br>\
+	<input type="submit" name="submit" value="submit">\
+</form>\
+<?php\
+if (isset($_POST["submit"]))\
+		\{$ok = true;\
+			header("Refresh: 3; url=phpudemy.php");\
+		\}\
+?>\
+</body>\
+</html>}
