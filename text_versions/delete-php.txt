@@ -1,0 +1,30 @@
+<?php
+	require 'auth.php';
+	if (isset($_GET['id']) && ctype_digit($_GET['id']))
+	{
+		$id = $_GET['id'];
+	}
+	else
+	{
+		header('Location: select.php');
+	}
+?>
+<!DOCTYPE>
+<html>
+<head>
+	<title>PHP</title>
+</head>
+<body>
+<body style='background-color:#a3c1ad'>
+<?php
+	readfile('navigation.tmpl.html');
+	$db =mysqli_connect('localhost', 'root', '', 'phpudemy');
+	$sql = "DELETE FROM users WHERE id=$id";
+	mysqli_query($db, $sql);
+	echo '<p>User deleted</p>';
+	echo '<p>Redirecting back to User Update Tool</p>';
+	mysqli_close($db);
+	header("Refresh: 3; url=select.php");
+?>
+</body>
+</html>
